@@ -11,8 +11,43 @@ app.listen(port, ()=>{  // 서버 실행 확인
     console.log(`express is running on ${port}`);
 });
 
+app.post('/idCheck', (req, res) => {   // id 중복 체크
+    console.log("id 중복 체크 실행");
+    console.log("req.body : " + JSON.stringify(req.body));
+
+    var id = req.body.id;
+
+    console.log("get_id : " + id);
+
+    var query = "SELECT EXISTS (SELECT * FROM users.user_information_table WHERE user_id='" + id + "' limit 1) as success";
+
+    users_db.query(query, function (err, row) {
+        if (err) {
+            console.log('err : ' + err);
+            // res.send({result : "fail"});
+        }
+        else {
+            console.log("중복 체크 완료, " + JSON.stringify(row));
+            
+            console.log("row.success : " + row[0].success);
+
+            var val = parseInt(row[0].success);
+
+            if (val == 1) { // 사용 불가
+                console.log("사용 불가");
+                res.send({result : false});
+            }
+            else {  // 사용 가능
+                console.log("사용 가능");
+                res.send({result : true});
+            }
+        }
+    })
+
+});
+
 app.post('/registration', (req, res) => {   // 회원가입 처리
-    console.log("서버 실행 됨");
+    console.log("회원가입 처리 실행");
     console.log("req.body : " + JSON.stringify(req.body));
     
     var id = req.body.id;
