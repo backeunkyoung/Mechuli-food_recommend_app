@@ -35,11 +35,11 @@ app.post('/idCheck', (req, res) => {   // id 중복 체크
 
             if (val == 1) { // 사용 불가
                 console.log("사용 불가");
-                res.send({result : false});
+                res.send({isRedup : false});
             }
             else {  // 사용 가능
                 console.log("사용 가능");
-                res.send({result : true});
+                res.send({isRedup : true});
             }
         }
     })
