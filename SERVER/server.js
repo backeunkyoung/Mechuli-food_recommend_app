@@ -1,7 +1,8 @@
+// 서버 실행은 해당 경로 터미널에서 node server.js 입력
 const express = require('express');
 const app = express();
 const port = 3333;
-const db = require('./DB/db');
+const users_db = require('./DB/users_db');
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
@@ -10,29 +11,29 @@ app.listen(port, ()=>{  // 서버 실행 확인
     console.log(`express is running on ${port}`);
 });
 
-// app.post('/registration', (req, res) => {   // 회원가입 처리
-//     console.log("서버 실행 됨");
-//     console.log("req.body : " + JSON.stringify(req.body));
+app.post('/registration', (req, res) => {   // 회원가입 처리
+    console.log("서버 실행 됨");
+    console.log("req.body : " + JSON.stringify(req.body));
     
-//     var id = req.body.postId;
-//     var pw = req.body.postPw;
-//     var nic_name = req.body.postNicName;
-//     var age = req.body.postAge;
-    
-//     console.log("get_id : " + id + ", get_pw : " + pw + ", get_nic_name : " + nic_name + ", get_age : " + age);
+    var id = req.body.id;
+    var pw = req.body.pw;
 
-//     var query = "insert into movies_db.users(`id`,`pw`,`nic_name`,`age`)VALUES('" + id + "','" + pw + "','" + nic_name + "','" + age + "')";
+    console.log("get_id : " + id + ", get_pw : " + pw);
 
-//     db.query(query, function (err, row) {
-//         if (err) {
-//             console.log('err : ' + err);
-//         }
-//         else {
-//             res.send({msg : "success"});
-//             console.log("회원가입 성공");
-//         }
-//     })
-// });
+    var query = "INSERT INTO users.user_information_table(`user_id`,`user_pw`)VALUES('" + id + "','" + pw + "')";
+
+    users_db.query(query, function (err, row) {
+        if (err) {
+            console.log('err : ' + err);
+            res.send({result : "fail"});
+        }
+        else {
+            // res.send({msg : "success"});
+            console.log("회원가입 성공");
+            res.send({result : "success"});
+        }
+    })
+});
 
 app.post('/login', (req, res) => {  // 로그인 처리
     var id = req.body.postId;
