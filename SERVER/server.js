@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const port = 3333;
-const users_db = require('./DB/users_db');
+const food_db = require('./DB/food_db');
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
@@ -17,19 +17,18 @@ app.post('/idCheck', (req, res) => {   // id 중복 체크
 
     var id = req.body.id;
 
-    console.log("get_id : " + id);
+    // console.log("get_id : " + id);
 
-    var query = "SELECT EXISTS (SELECT * FROM users.user_information_table WHERE user_id='" + id + "' limit 1) as success";
+    var query = "SELECT EXISTS (SELECT * FROM food_db.USERINFO WHERE user_ID='" + id + "' limit 1) as success";
 
-    users_db.query(query, function (err, row) {
+    food_db.query(query, function (err, row) {
         if (err) {
             console.log('err : ' + err);
             // res.send({result : "fail"});
         }
         else {
-            console.log("중복 체크 완료, " + JSON.stringify(row));
-            
-            console.log("row.success : " + row[0].success);
+            // console.log("중복 체크 완료, " + JSON.stringify(row));
+            // console.log("row.success : " + row[0].success);
 
             var val = parseInt(row[0].success);
 
@@ -53,11 +52,11 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
     var id = req.body.id;
     var pw = req.body.pw;
 
-    console.log("get_id : " + id + ", get_pw : " + pw);
+    // console.log("get_id : " + id + ", get_pw : " + pw);
 
-    var query = "INSERT INTO users.user_information_table(`user_id`,`user_pw`)VALUES('" + id + "','" + pw + "')";
+    var query = "INSERT INTO food_db.USERINFO(`user_ID`,`user_PASSWORD`)VALUES('" + id + "','" + pw + "')";
 
-    users_db.query(query, function (err, row) {
+    food_db.query(query, function (err, row) {
         if (err) {
             console.log('err : ' + err);
             res.send({result : "fail"});
