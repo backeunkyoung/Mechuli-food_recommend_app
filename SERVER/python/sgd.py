@@ -1,3 +1,17 @@
+# import sys;
+
+# print("code complete")
+
+# print(sys.argv[1])
+
+# import json
+# import sys
+
+# result = json.loads(sys.argv[1])['result']
+# inputData = json.loads(sys.argv[2])['inputData']
+
+# print(json.dumps(result))
+
 ### SGD 방식
 import sys
 
@@ -9,14 +23,22 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import warnings
+
+# import request, json
+import json
+
+data = {}
+headers = {}
+# requests.port(url, json=data, headers=headers)
+
 #import pymysql
 warnings.filterwarnings("ignore")
 ##np.set_printoptions(threshold=sys.maxsize, linewidth=sys.maxsize)
 ##pd.set_option('display.max_columns',None)
 ##pd.set_option('display.max_rows',None)
 
-df_ratings  = pd.read_csv('./DB/datas/food_rating.csv') # userId, foodId, rating
-df_movies  = pd.read_csv('./DB/datas/food_name.csv')    # foodid, foodname, type_1, image
+df_ratings  = pd.read_csv('../DB/datas/food_rating.csv') # userId, foodId, rating
+df_movies  = pd.read_csv('../DB/datas/food_name.csv')    # foodid, foodname, type_1, image
 
 df_user_movie_ratings = df_ratings.pivot(   # 행, 렬, 값 설정
     index='userId',
@@ -49,7 +71,6 @@ class MatrixFactorization():
         :param epochs: training epochs  ( 학습 횟수 )
         :param verbose: print status
         """
-
         self._R = R
         self._num_users, self._num_items = R.shape
         self._k = k
@@ -57,7 +78,6 @@ class MatrixFactorization():
         self._reg_param = reg_param
         self._epochs = epochs
         self._verbose = verbose
-
 
     def fit(self):
         """
@@ -213,5 +233,5 @@ if __name__ == "__main__":
 
     # P, Q is (7 X k), (k X 5) matrix
     factorizer = MatrixFactorization(matrix, k=3, learning_rate=0.01, reg_param=0.01, epochs=300, verbose=True)
-    # factorizer.fit()
-    # factorizer.print_results()
+    factorizer.fit()
+    factorizer.print_results()
