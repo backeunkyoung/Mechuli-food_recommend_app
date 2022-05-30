@@ -51,6 +51,65 @@ app.post('/idCheck', (req, res) => {   // id 중복 체크
 
 });
 
+app.post('/getMenuImg', (req, res) => {     // menu img 가져오기
+    console.log("---------menu img 가져오기-----------");
+    // console.log("req.body : " + JSON.stringify(req.body));
+
+    var nameList = req.body.nameList;
+    console.log(JSON.stringify(nameList));
+
+    // var id = req.body.id;
+
+    var queryList = [];
+
+    for (var i = 0; i < nameList.length; i++) {
+        var command = "SELECT * FROM food_db.FOOD WHERE foodname = '" + nameList[i] + "';";
+        queryList.push(command);
+    }
+
+    // for (var i = 0; i < queryList.length; i++) {
+    //     console.log(queryList[i]);
+    // }
+
+    var resultList = [];
+    for (var i = 0; i < queryList.length; i++) {
+        var query = queryList[i];
+
+        food_db.query(query, function (err, row) {
+            if (err) {
+                console.log('err : ' + err);
+            }
+            else {
+                // console.log("imgSrc 가져오기, " + JSON.stringify(row));
+                for (var data of row) {
+                    // console.log(data.foodname + " , " + data.image_1 + " , " + data.image_2);
+
+                    // var result= [];
+                    // result.push(data.foodname);
+                    // result.push(data.image_1);
+                    // result.push(data.image_2);
+                    // resultList.push(result);
+
+                    var ob = new Object();
+                    ob.foodname = data.foodname;
+                    ob.image_1 = data.image_1;
+                    ob.image_2 = data.image_2;
+                    resultList.push(ob);
+
+                    if (resultList.length == nameList.length) {
+                        for ( var i = 0; i < resultList.length; i++) {
+                            console.log(i + " : " + JSON.stringify(resultList[i]));
+                        }
+
+                        console.log("imgSrc List 전송")
+                        res.send(resultList);
+                    }
+                }
+            }
+        })
+    }
+});
+
 app.post('/registration', (req, res) => {   // 회원가입 처리
     console.log("--------- 회원가입 처리 -----------");
     console.log("req.body : " + JSON.stringify(req.body));
@@ -109,7 +168,7 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
                                     console.log('err : ' + err);
                                 }
                                 else {
-                                    console.log(count + " : rating 정보 등록 성공");
+                                    // console.log(count + " : rating 정보 등록 성공");
                                     count++;
                                     if (count == originMap.size) {
                                         var query = "INSERT INTO food_db.USERINFO(`user_ID`,`user_PASSWORD`)VALUES('" + id + "','" + pw + "')";
@@ -136,31 +195,38 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
 });
 
 app.post('/login', (req, res) => {  // 로그인 처리
-    var id = req.body.postId;
-    var pw = req.body.postPw;
+    console.log("--------- 로그인 처리 -----------");
+    // console.log(JSON.stringify(req.body));
+
+    var id = req.body.id;
+    var pw = req.body.pw;
     console.log("get_id : " + id + " , get_pw : " + pw);
 
-    // var query = "INSERT INTO food_db.USERINFO(`user_ID`,`user_PASSWORD`)VALUES('" + id + "','" + pw + "')";
-
-    // food_db.query(query, function (err, row) {
-    //     if (err) {
-    //         console.log('err : ' + err);
-    //         res.send({result : "fail"});
-    //     }
-    //     else {
-    //         // res.send({msg : "success"});
-    //         console.log("로그인 성공");
-    //         res.send({result : "success"});
-    //     }
-    // })
+    var query = "SELECT EXISTS (SELECT * FROM food_db.USERINFO WHERE user_ID = '" + id + "' AND user_PASSWORD = '" + pw + "' limit 1) as success;";    
+    food_db.query(query, function (err, row) {
+        if (err) {
+            console.log('err : ' + err);
+        }
+        
+        var val = parseInt(row[0].success);
+        // console.log(val);
+        if (val == 1) { // 사용 불가
+            console.log("로그인 성공");
+            res.send({isUser : true});
+        }
+        else {
+            console.log("로그인 실패(비회원)");
+            res.send({isUser : false});
+        }
+    })
 });
 
 app.post('/recommend', (req, res) => {   // 추천 시스템 처리
 
     console.log("추천 시스템 처리 실행");
-    // console.log("req.body : " + JSON.stringify(req.body));
+    console.log("req.body : " + JSON.stringify(req.body));
     
-    var id = req.body.userId;
+    var id = req.body.id;
     console.log("get_id : " + id);
 
     var tableNames = ["FOOD", "RATING"];
@@ -173,16 +239,15 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
     }
 
     var callbackFn = function (err, row) {  // callback 함수 설정
-        if (!err) { // err가 안뜨면
-            tables.push(row);   // tables 배열에 row push
-            //tablePrint(tableNames, tables);   // tables 배열 출력
+        if (!err) {
+            tables.push(row);
             runPython(tables);  // python code 실행
         }
     }
 
-    food_db.query(queryCommand[0], (err, row) => {    // 프로미스
-        if (!err) { // err가 안뜨면
-            tables.push(row);   // tables 배열에 row push
+    food_db.query(queryCommand[0], (err, row) => {
+        if (!err) {
+            tables.push(row);
             food_db.query(queryCommand[1], callbackFn); // query 처리 후 callbackFn 실행
         }
     });
@@ -192,12 +257,13 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
         pythonPath: '',
         pythonOptions: ['-u'],
         scriptPath: './python',
-        args: ['value1', 'value2', 'value3']
+        // args: ['value1', 'value2', 'value3']
+        args : datas
     }
 
     function runPython(datas) {
-
-        tablePrint(tableNames, datas);
+        // tablePrint(tableNames, datas);
+        console.log("runPython 함수 실행");
         PythonShell.run('sgd.py', options, function(err, results) {
             if (err) {
                 console.log('err :' + err);
