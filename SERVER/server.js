@@ -110,7 +110,7 @@ app.post('/getMenuImg', (req, res) => {     // menu img 가져오기
                     if (resultList.length == nameList.length) {
                         console.log(resultList);
                         console.log("imgSrc List 전송")
-                        res.send(resultList);
+                        res.send({resultList : resultList});
                     }
                 }
             }
@@ -264,7 +264,7 @@ app.post('/getMenuList', (req, res) => {   // Food Table 리스트 불러오기
             if (row.length != 0) {
                 for (var data of row) {
                     foodid = data.foodid;
-                    rating = data.rating;
+                    rating = parseFloat(data.rating);
     
                     for (var i = 0; i < obList.length; i++) {
                         if (obList[i].foodid == foodid) {
@@ -297,7 +297,7 @@ app.post('/getMenuList', (req, res) => {   // Food Table 리스트 불러오기
                 ob.foodname = data.foodname;
                 ob.image_1 = data.image_1;
                 ob.image_2 = data.image_2;
-                ob.rating = "0";
+                ob.rating = 0.0;
 
                 obList.push(ob);
 
