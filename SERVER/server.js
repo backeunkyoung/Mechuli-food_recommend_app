@@ -176,11 +176,7 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
                                         var query = "INSERT INTO food_db.USERINFO(`user_ID`,`user_PASSWORD`)VALUES('" + id + "','" + pw + "')";
 
                                         food_db.query(query, function (err, row) {
-                                            if (err) {
-                                                console.log('err : ' + err);
-                                                res.send({result : true});
-                                            }
-                                            else {
+                                            if (!err) {
                                                 console.log("회원가입 성공");
                                                 res.send({result : true});
                                             }
@@ -348,16 +344,17 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
         }
     });
 
-    var options = {
-        mode: 'text',
-        pythonPath: '',
-        pythonOptions: ['-u'],
-        scriptPath: './python',
-        // args: ['value1', 'value2', 'value3']
-        args : datas
-    }
-
     function runPython(datas) {
+
+        var options = {
+            mode: 'text',
+            pythonPath: '',
+            pythonOptions: ['-u'],
+            scriptPath: './python',
+            // args: ['value1', 'value2', 'value3']
+            args : datas
+        }
+
         // tablePrint(tableNames, datas);
         console.log("runPython 함수 실행");
         PythonShell.run('sgd.py', options, function(err, results) {

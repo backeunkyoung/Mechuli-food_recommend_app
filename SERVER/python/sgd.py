@@ -1,22 +1,25 @@
+# ### SGD 방식
 import sys
 
+from sklearn.decomposition import TruncatedSVD
+from scipy.sparse.linalg import svds
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import warnings
+
+# import request, json
+import json
+
 print("python code 실행중")
-print(sys.argv)
+getData = sys.argv
 
-# ### SGD 방식
-# import sys
+for i in range(0, len(getData)) :
+    for j in getData[i] :
+        print(JSON.stringify(j))
 
-# from sklearn.decomposition import TruncatedSVD
-# from scipy.sparse.linalg import svds
-
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# import pandas as pd
-# import numpy as np
-# import warnings
-
-# # import request, json
-# import json
 
 # data = {}
 # headers = {}
