@@ -129,11 +129,6 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
     // console.log("get_id : " + id + ", get_pw : " + pw);
     // console.log("signUpRatings : " + signUpRatings);
 
-    // var rateMap = new Map([['떡볶이', 4.0], ['파스타', 2.5]]);
-    // rateMap = [['떡볶이', 4.0], ['파스타', 2.5]];
-    // var commend = "rateMap = " + signUpRatings + ";";
-    // eval(commend);
-
     var rateStr = signUpRatings.substring(1, signUpRatings.length-1);
     rateStr = rateStr.replace(/\s/gi, "");
     // console.log(rateStr);
@@ -221,94 +216,55 @@ app.post('/getMenuList', (req, res) => {   // Food Table 리스트 불러오기
     console.log("---------Food Table 리스트 불러오기-----------");
     console.log("req.body : " + JSON.stringify(req.body));
 
-    // var id = req.body.id;
-    var id = "0";
-    var keyWord = "나";
-  
+    var id = req.body.id;
+
+    var usersFoodidList = [];
+    var foodidAndRateList = [];
     var resultList = [];
-    var obList = [];
-    var rateQueryList = [];
-    var count = 0;
-
-    function sendData(getList) {
-        for (var i = 0; i < getList.length; i++) {
-            var name = getList[i].foodname;
-            var img_1 = getList[i].image_1;
-            var img_2 = getList[i].image_2;
-            var rating = getList[i].rating;
-
-            var ob = new Object();
-            ob.foodname = name
-            ob.image_1 = img_1
-            ob.image_2 = img_2
-            ob.rating = rating;
-
-            resultList.push(ob);
-        }
-        console.log("resultList : " + JSON.stringify(resultList));
-
-        // send
-        res.send({menuList : resultList});
-    }
-
-    var getRateFn = function (err, row) {
+    var getUserRatequery = "SELECT * FROM food_db.RATING WHERE userid = '" + id + "'";
+    food_db.query(getUserRatequery, function (err, row) {   // 사용자의 foodid, rating 정보를 RATING table에서 가져오기
         if (!err) {
-            var foodid;
-            var rating;
-            var foodname;
+            for (var data of row) {
+                usersFoodidList.push(data.foodid);
+                var m = new Map();
+                m.set(data.foodid, data.rating);
+                foodidAndRateList.push(m);
+            }
+            
+            // console.log(usersFoodidList);
+            // console.log(foodidAndRateList);
+            if (row.length == foodidAndRateList.length) {
+                var getMenuDataQuery = "SELECT * FROM food_db.FOOD;"
+                food_db.query(getMenuDataQuery, function (err, row) {   // 모든 메뉴 리스트 받아오기
+                    if (!err) {
+                        for (var data of row) {
+                            var ob = new Object();
+                            ob.foodname = data.foodname
+                            ob.image_1 = data.image_1
+                            ob.image_2 = data.image_2
 
-            if (row.length != 0) {
-                for (var data of row) {
-                    foodid = data.foodid;
-                    rating = parseFloat(data.rating);
-    
-                    for (var i = 0; i < obList.length; i++) {
-                        if (obList[i].foodid == foodid) {
-                            obList[i].rating = rating;
-                            foodname = obList[i].foodname;
+                            var foodCheck = usersFoodidList.indexOf(data.foodid);
+                            if (foodCheck != -1) {
+                                var strRate = foodidAndRateList[foodCheck].get(data.foodid);
+                                // console.log(data.foodid + " , " + strRate);
+                                var floatRate = parseFloat(strRate);
+                                ob.rating = floatRate;
+                            }
+                            else {
+                                ob.rating = 0.0;
+                            }
+                            resultList.push(ob);
+
+                            if (row.length == resultList.length) {
+                                // console.log(resultList);
+                                console.log("메뉴 List 전송");
+                                res.send({menuList : resultList});
+                            }
                         }
                     }
-                }
-                console.log("foodid : " + foodid + ", foodname : " + foodname + ", rating : " + rating);
+                });
             }
-
-            count++;
-            if (count == obList.length) {
-                sendData(obList)
-            }
-        }
-    }
-    
-    // 키워드로 FOOD에서 메뉴 검색
-    var KeywordQuery = "SELECT * FROM food_db.FOOD WHERE foodname LIKE '%" + keyWord + "%';";
-    food_db.query(KeywordQuery, function (err, row) {
-        if (!err) {
-            // console.log(JSON.stringify(row));
-            for (var data of row) {
-                // 메뉴 리스트에서 foodid, foodname, image_1, image_2 추출
-                // console.log(data.foodid + " , " + data.foodname + " , " + data.image_1 + " , " + data.image_2);
-
-                var ob = new Object();
-                ob.foodid = data.foodid;
-                ob.foodname = data.foodname;
-                ob.image_1 = data.image_1;
-                ob.image_2 = data.image_2;
-                ob.rating = 0.0;
-
-                obList.push(ob);
-
-                if (obList.length == row.length) {
-                    for (var i = 0; i < obList.length; i++) {
-                        var q = "SELECT * FROM food_db.RATING WHERE userid = '" + id + "' AND foodid = '" + obList[i].foodid + "';";
-                        rateQueryList.push(q);
-                    }
-                    // console.log(rateQueryList);
-
-                    for (var i = 0; i < rateQueryList.length; i++) {
-                        food_db.query(rateQueryList[i], getRateFn);
-                    }
-                }
-            }
+            console.log(foodidAndRateList);
         }
     });
 });
@@ -345,7 +301,6 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
     });
 
     function runPython(datas) {
-
         var options = {
             mode: 'text',
             pythonPath: '',
@@ -363,9 +318,14 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
                 throw err;
             }
             else {
+                console.log("python 파일에서 menuList 받아옴");
                 console.log(results);
+
+                // console.log("---------------");
+                // console.log(results[0]);
+
+                res.send({menuList : results});
             }
         });
-    }
-    
+    } 
 });
