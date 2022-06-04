@@ -379,8 +379,46 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
                 // console.log("---------------");
                 // console.log(results[0]);
 
-                res.send({menuList : results});
+                var resultList = [];
+                for (var i = 0; i < 5; i++) {
+                    var ob = new Object();
+                    ob.foodname = "foodName" + i;
+                    ob.image_1 = "firstImgsrc" + i;
+                    ob.image_2 = "secondImgsrc" + i;
+                    ob.rating = 0.0;
+
+                    resultList.push(ob);
+                }
+                console.log(resultList);
+                console.log("추천 리스트 전송 완료");
+                res.send({menuList : resultList});
             }
         });
     } 
+});
+
+app.post('/randomRecommend', (req, res) => {   // 랜덤으로 추천
+    console.log("--------- 랜덤으로 추천 실행 ---------");
+    
+    var resultList = [];
+    var query = "SELECT * FROM food_db.FOOD ORDER BY RAND() LIMIT 5;";
+    food_db.query(query, (err, row) => {
+        if (!err) {
+            // console.log(JSON.stringify(row));
+            for (var data of row) {
+                var ob = new Object();
+                ob.foodname = data.foodname;
+                ob.type_1 = data.type_1;
+                ob.type_2 = data.type_2;
+                ob.image_1 = data.image_1;
+                ob.image_2 = data.image_2;
+
+                resultList.push(ob);
+            }
+            
+            // console.log(resultList);
+            console.log("random List 전송 완료");
+            res.send({menuList : resultList});
+        }
+    });
 });
