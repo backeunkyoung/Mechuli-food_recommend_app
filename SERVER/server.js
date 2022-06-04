@@ -269,6 +269,61 @@ app.post('/getMenuList', (req, res) => {   // Food Table 리스트 불러오기
     });
 });
 
+app.post('/setMenuRating', (req, res) => {   // Rating 정보 수정
+    console.log("---------Rating 정보 수정-----------");
+    console.log("req.body : " + JSON.stringify(req.body));
+
+    var id = req.body.id;
+    var getData = req.body.setRatings;
+
+    var rateStr = getData.substring(1, getData.length-1);
+    // console.log(rateStr);
+
+    var rateArr = rateStr.split("=");
+
+    var foodname = rateArr[0];
+    var newRate = rateArr[1];
+
+    var foodid;
+    var getFoodIdQuery = "SELECT foodid FROM food_db.FOOD WHERE foodname='" + foodname + "';";
+    food_db.query(getFoodIdQuery, function (err, row) {
+        if (!err) {
+            // console.log(JSON.stringify(row));
+            for (var data of row) {
+                foodid = data.foodid;
+                // console.log(foodid);
+            }
+
+            var isCheckQuery = "SELECT EXISTS (SELECT * FROM food_db.RATING WHERE userid = '" + id + "' AND foodid = '" + foodid + "' limit 1) as success;";
+            food_db.query(isCheckQuery, function (err, row) {
+                if (!err) {
+                    for (var data of row) {
+                        checking = data.success;
+                        // console.log(checking);
+
+                        var updateRatingQuery = "";
+                        if (checking == 1) {    // update
+                            console.log("평가 이력 존재, update 시행");
+                            updateRatingQuery = "UPDATE food_db.RATING SET rating = '" + newRate + "' WHERE userid = '" + id + "' AND foodid = '" + foodid + "';";
+                        }
+                        else {  // insert
+                            console.log("평가 이력 없음, insert 시행");
+                            updateRatingQuery = "INSERT INTO food_db.RATING(userid, foodid, rating)VALUES('" + id + "', '" + foodid + "', '" + newRate + "');";
+                        }
+
+                        food_db.query(updateRatingQuery, function (err, row) {
+                            if (!err) {
+                                console.log("RATING table 수정 완료");
+                                res.send({result : true});
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+});
+
 app.post('/recommend', (req, res) => {   // 추천 시스템 처리
 
     console.log("추천 시스템 처리 실행");
