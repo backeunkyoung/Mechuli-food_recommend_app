@@ -45,9 +45,8 @@ class MatrixFactorization():
             self._training_process.append((epoch, cost))
 
             # print status
-            if self._verbose == True and ((epoch + 1) % 10 == 0):
-                print("Iteration: %d ; cost = %.4f" % (epoch + 1, cost))
-
+            # if self._verbose == True and ((epoch + 1) % 10 == 0):
+            #     print("Iteration: %d ; cost = %.4f" % (epoch + 1, cost))
 
     def cost(self):
         xi, yi = self._R.nonzero()
