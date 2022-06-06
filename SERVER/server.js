@@ -242,6 +242,7 @@ app.post('/getMenuList', (req, res) => {   // Food Table 리스트 불러오기
     food_db.query(getUserRatequery, function (err, row) {   // 사용자의 foodid, rating 정보를 RATING table에서 가져오기
         if (!err) {
             for (var data of row) {
+                // console.log(JSON.stringify(row));
                 usersFoodidList.push(data.foodid);
                 var m = new Map();
                 m.set(data.foodid, data.rating);
