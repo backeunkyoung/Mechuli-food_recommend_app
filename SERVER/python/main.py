@@ -5,7 +5,7 @@ import json
 #from sklearn.decomposition import TruncatedSVD
 #from scipy.sparse.linalg import svds
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import seaborn as snspip
 import pandas as pd
 import numpy as np
@@ -37,9 +37,10 @@ if __name__ == "__main__":
     # df_food_tag = pd.read_csv('./csv/foodTag.csv') # food_tag
 
     ###### 입력받을 곳
+    # userid = 10
     # userid = 49
     # userid = 2222
-    userid = getUserId  ## 추천을 받을 userID 정보 입력
+    userid = int(getUserId)  ## 추천을 받을 userID 정보 입력
     user_index = df_userinfo[df_userinfo['user_ID'] == userid].index[0]
     # print(user_index)
     user_sex = df_userinfo.iloc[user_index, 1]

@@ -14,12 +14,6 @@ const PythonShell = require('python-shell').PythonShell;
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 
-function tablePrint(tableNames, datas) {
-    datas.forEach(function (val, idx) {
-        console.log("\n" + tableNames[idx] + JSON.stringify(val));
-    })
-}
-
 app.listen(port, ()=>{  // 서버 실행 확인
     console.log(`express is running on ${port}`);
 });
@@ -113,7 +107,7 @@ app.post('/getMenuImg', (req, res) => {     // menu img 가져오기
                     // }
 
                     if (resultList.length == nameList.length) {
-                        console.log(resultList);
+                        // console.log(resultList);
                         console.log("imgSrc List 전송")
                         res.send({resultList : resultList});
                     }
@@ -130,12 +124,21 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
     var id = req.body.id;
     var pw = req.body.pw;
     var age = req.body.age;
-    var gender = req.body.gender;
+    var sex = req.body.sex;
     var signUpRatings = req.body.signUpRatings
 
     var regex = /[^0-9]/gi;
     age = age.replace(regex, "");
-    console.log("age : " + age);
+    // console.log("age : " + age);
+
+    var intSex;
+    if (sex == "남자") {
+        intSex= "1";
+    }
+    else if (sex == "여자") {
+        intSex = "2";
+    }
+    // console.log("intSex : " + intSex);
 
     // console.log("get_id : " + id + ", get_pw : " + pw);
     // console.log("signUpRatings : " + signUpRatings);
@@ -184,7 +187,7 @@ app.post('/registration', (req, res) => {   // 회원가입 처리
                                             if (!err) {
                                                 console.log("회원가입 성공");
 
-                                                var query = "INSERT INTO food_db.user_random_data(user_ID, sex, age, age_group)VALUES('" + id + "', '" + gender + "', '" + age + "', 0);";
+                                                var query = "INSERT INTO food_db.user_random_data(user_ID, sex, age, age_group)VALUES('" + id + "', '" + intSex + "', '" + age + "', 0);";
                                                 food_db.query(query, function (err, row) {
                                                     if (!err) {
                                                         console.log("사용자 정보 등록 성공");
@@ -443,7 +446,7 @@ app.post('/recommend', (req, res) => {   // 추천 시스템 처리
         }
 
         // tablePrint(tableNames, datas);
-        console.log("runPython 함수 실행");
+        console.log("runPython 함수 실행, id : " + id);
         PythonShell.run('main.py', options, function(err, results) {
             if (err) {
                 console.log("err : " + err);
