@@ -1,4 +1,4 @@
-const postService = require("../../app/Post/postService");
+const postService = require("./postService");
 
 /*
  * API No. 1

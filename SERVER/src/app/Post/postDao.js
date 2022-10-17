@@ -30,8 +30,6 @@ async function selectAllRecipe(connection) {
 async function selectWhereLikeAllRecipe(connection, keyword) {
     const query = mysql.format(`SELECT recipe_id, user_id, user_nickname, recipe_title, update_time, recipe_img_url_1
      FROM food_db.Recipe_table WHERE recipe_title LIKE ?;`, [keyword]);
-    console.log(query);
-
     const Rows = await connection.query(query);
 
     return Rows[0];

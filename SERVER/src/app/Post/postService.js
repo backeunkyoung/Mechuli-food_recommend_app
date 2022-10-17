@@ -24,9 +24,9 @@ exports.getPreviewRecipe = async function () {
 exports.getSearchPreviewRecipe = async function (keyword) {
     try {
         const rows = await postProvider.printSearchPreviewRecipe(keyword);
-        console.log("\n----------------------------------------------------------");
-        console.log(rows);
-        console.log("----------------------------------------------------------");
+        // console.log("\n----------------------------------------------------------");
+        // console.log(rows);
+        // console.log("----------------------------------------------------------");
 
         return response(baseResponse.SUCCESS, rows);
 
