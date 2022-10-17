@@ -1,5 +1,8 @@
 module.exports = {
 
+    OK : { "isSuccess": true, "code": 200, "message":"성공" },
+    FORBIDDEN : { "isSuccess": false, "code": 403, "message":"해당 권한이 없습니다." },
+
     // Success
     SUCCESS : { "isSuccess": true, "code": 1000, "message":"성공" },
 

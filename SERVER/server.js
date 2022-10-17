@@ -5,7 +5,7 @@ const app = express();
 const port = 3333;
 const xlsx = require('xlsx')
 const fs = require('fs')
-const food_db = require('./config/food_db');
+const food_db = require('./config/database');
 const { json } = require('body-parser');
 const { Console } = require('console');
 

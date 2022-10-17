@@ -1,10 +1,4 @@
-const userProvider = require("../../app/User/userProvider");
 const userService = require("../../app/User/userService");
-
-exports.home = async function (req, res) {
-    // console.log(JSON.stringify(req));
-    return res.send("루트 페이지");
-}
 
 /*
  * API No. 1
