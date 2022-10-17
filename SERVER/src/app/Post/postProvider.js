@@ -4,6 +4,22 @@ const postDao = require("./postDao");
 
 // Provider: Read 비즈니스 로직 처리
 
+exports.printPreviewRecipe = async function () {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.selectAllRecipe(connection);
+    connection.release();
+
+    return result;
+};
+
+exports.printSearchPreviewRecipe = async function (keyword) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.selectWhereLikeAllRecipe(connection, keyword);
+    connection.release();
+
+    return result;
+};
+
 exports.retrieveUserNickname = async function (user_id) {
     const connection = await pool.getConnection(async (conn) => conn);
     const result = await postDao.selectUserNickname(connection, user_id);
@@ -39,6 +55,14 @@ exports.modifyRecipe = async function (user_nickname, recipe_title, recipe_ingre
 exports.removeRecipe = async function (recipe_id) {
     const connection = await pool.getConnection(async (conn) => conn);
     const result = await postDao.deleteRecipe(connection, recipe_id);
+    connection.release();
+
+    return result;
+};
+
+exports.printRecipe = async function (recipe_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.selectRecipe(connection, recipe_id);
     connection.release();
 
     return result;

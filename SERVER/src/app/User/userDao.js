@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 
 // 회원 가입
 async function insertIntoUser(connection, user_id, user_pw, user_nickname) {
-    const query = mysql.format(`INSERT INTO food_db.user(user_id, user_pw, user_nickname)VALUES(?, ?,  ?);`, [user_id, user_pw, user_nickname]);
+    const query = mysql.format(`INSERT INTO food_db.user(user_id, user_pw, user_nickname)VALUES(?, ?, ?);`, [user_id, user_pw, user_nickname]);
     const Rows = await connection.query(query);
 
     return Rows;
