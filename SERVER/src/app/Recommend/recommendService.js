@@ -3,50 +3,24 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const {response} = require("../../../config/response");
 const {errResponse} = require("../../../config/response");
 
-exports.getSignUpImgList = async function () {
+exports.putFoodScoreModify = async function (user_id, menu_id, user_score) {
     try {
-        const rows = await foodProvider.signUpImgList();
-        // console.log("\n----------------------------------------------------------");
-        // console.log(rows);
-        // console.log("----------------------------------------------------------");
+        // 평점 추가인지 수정인지 확인
+        const existResult = await recommendProvider.foodScoreIsExist(user_id, menu_id);
+        
+        const isExist = existResult[0].success;
 
-        return response(baseResponse.SUCCESS, rows);
+        if (isExist == "0") {   // score add
+            await recommendProvider.scoreADD(user_id, menu_id, user_score);
+            return response(baseResponse.SUCCESS);
 
-    } catch(err) {
-        console.log("\n----------------------------------------------------------");
-        console.log(err);
-        console.log("----------------------------------------------------------");
+        } else if (isExist == "1") {    // score modify
+            await recommendProvider.scoreModify(user_id, menu_id, user_score);
+            return response(baseResponse.SUCCESS);
 
-        return errResponse(baseResponse.DB_ERROR);
-    }
-};
+        }
 
-exports.getFoodScoreModifyImgList = async function (keyword) {
-    try {
-        const rows = await foodProvider.FoodScoreModifyImgList(keyword);
-        // console.log("\n----------------------------------------------------------");
-        // console.log(rows);
-        // console.log("----------------------------------------------------------");
-
-        return response(baseResponse.SUCCESS, rows);
-
-    } catch(err) {
-        console.log("\n----------------------------------------------------------");
-        console.log(err);
-        console.log("----------------------------------------------------------");
-
-        return errResponse(baseResponse.DB_ERROR);
-    }
-};
-
-exports.getFoodInfo = async function (user_id, menu_id) {
-    try {
-        const rows = await foodProvider.FoodInfo(user_id, menu_id);
-        // console.log("\n----------------------------------------------------------");
-        // console.log(rows);
-        // console.log("----------------------------------------------------------");
-
-        return response(baseResponse.SUCCESS, rows[0]);
+        return errResponse(baseResponse.SERVER_ERROR);
 
     } catch(err) {
         console.log("\n----------------------------------------------------------");

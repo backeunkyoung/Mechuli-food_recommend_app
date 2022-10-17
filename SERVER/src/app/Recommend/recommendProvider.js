@@ -4,25 +4,25 @@ const recommendDao = require("./recommendDao");
 
 // Provider: Read 비즈니스 로직 처리
 
-exports.signUpImgList = async function () {
+exports.foodScoreIsExist = async function (user_id, menu_id) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const result = await foodDao.selectSignUpImgList(connection);
+    const result = await recommendDao.selectExistsUserScore(connection, user_id, menu_id);
     connection.release();
 
     return result;
 };
 
-exports.FoodScoreModifyImgList = async function (keyword) {
+exports.scoreADD = async function (user_id, menu_id, user_score) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const result = await foodDao.selectSearchImgList(connection, keyword);
+    const result = await recommendDao.insertIntoUserScore(connection, user_id, menu_id, user_score);
     connection.release();
 
     return result;
 };
 
-exports.FoodInfo = async function (user_id, menu_id) {
+exports.scoreModify = async function (user_id, menu_id, user_score) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const result = await foodDao.selectFoodScoreinfo(connection, user_id, menu_id);
+    const result = await recommendDao.updateSetUserScore(connection, user_id, menu_id, user_score);
     connection.release();
 
     return result;

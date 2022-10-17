@@ -22,6 +22,7 @@ module.exports = function () {
     /* App (Android, iOS) */
     // TODO: 도메인을 추가할 경우 이곳에 Route를 추가하세요.
     require('../src/app/User/userRoute')(app);
+    require('../src/app/Recommend/recommendRoute')(app);
     require('../src/app/Post/postRoute')(app);
     require('../src/app/Food/foodRoute')(app);
 
