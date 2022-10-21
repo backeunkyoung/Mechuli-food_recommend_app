@@ -53,7 +53,7 @@ exports.signIn = async function (user_id, user_pw) {
             }
 
             if (isUser == "1") {
-                return response(baseResponse.SUCCESS, {'userId': user_id});
+                return response(baseResponse.SUCCESS, {'user_id': user_id});
             }
             else if (isUser == "0") {
                 return response(baseResponse.USER_USERID_NOT_EXIST);
