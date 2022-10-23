@@ -13,10 +13,16 @@ exports.signUp = async function (user_id, user_pw, user_nickname, signUpRatings)
         console.log("----------------------------------------------------------");
         // console.log(signUpRatings[0]);
 
+        let menu_id_1 = signUpRatings[0].menu_id; let score_1 = signUpRatings[0].score;
+        let menu_id_2 = signUpRatings[1].menu_id; let score_2 = signUpRatings[1].score;
+        let menu_id_3 = signUpRatings[2].menu_id; let score_3 = signUpRatings[2].score;
+        let menu_id_4 = signUpRatings[3].menu_id; let score_4 = signUpRatings[3].score;
+        let menu_id_5 = signUpRatings[4].menu_id; let score_5 = signUpRatings[4].score;
+
         try {
             await userProvider.userSignUp(user_id, user_pw, user_nickname);
 
-            // AFTER : 추천 알고리즘을 위한 초기 평점(signUpRatings) 저장
+            await userProvider.userRatingAdd(user_id, menu_id_1, menu_id_2, menu_id_3, menu_id_4, menu_id_5, score_1, score_2, score_3, score_4, score_5);
 
             return response(baseResponse.SUCCESS);
 
