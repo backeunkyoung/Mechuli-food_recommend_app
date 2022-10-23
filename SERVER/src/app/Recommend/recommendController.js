@@ -34,9 +34,9 @@ exports.putRecommend = async function (req, res) {
 
     let user_id = req.body.user_id;
     let menu_id = req.body.menu_id;
-    let user_score = req.body.user_score;
+    let score = req.body.score;
 
-    const result = await recommendService.putFoodScoreModify(user_id, menu_id, user_score);
+    const result = await recommendService.putFoodScoreModify(user_id, menu_id, score);
 
     // return 값 확인
     console.log("\n----------- return data -------------");

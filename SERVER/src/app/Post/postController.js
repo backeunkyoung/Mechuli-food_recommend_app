@@ -139,16 +139,89 @@ exports.deleteRecipe = async function (req, res) {
 exports.getRecipe = async function (req, res) {
     // console.log("\n----------------------------------------------------------");
     // console.log(req.params);
+    // console.log("----------------------------------------------------------");
+
+    let recipe_id = req.params.recipeId;
+
+    const result = await postService.getRecipe(recipe_id);
+
+    // return 값 확인
+    console.log("\n----------- return data -------------");
+    console.log(result);
+    console.log("-------------------------------------");
+
+    return res.send(result);
+};
+
+/*
+ * API No. 7
+ * API Name : 레시피 댓글 생성
+ * [GET] /posts/recipe/replys
+ */
+exports.postReply = async function (req, res) {
+    // console.log("\n----------------------------------------------------------");
+    // console.log(req.body);
+    // console.log("----------------------------------------------------------");
+
+    let reply_user_id = req.body.user_id;
+    let recipe_id = req.body.recipe_id;
+    let reply_content = req.body.reply_content;
+    let reply_score = req.body.score;
+
+    const result = await postService.postReply(reply_user_id, recipe_id, reply_content, reply_score);
+
+    // return 값 확인
+    console.log("\n----------- return data -------------");
+    console.log(result);
+    console.log("-------------------------------------");
+
+    return res.send(result);
+};
+
+/*
+ * API No. 8
+ * API Name : 레시피 댓글 수정
+ * [PUT] /posts/recipe/replys/:replyId
+ */
+exports.putReply = async function (req, res) {
+    // console.log("\n----------------------------------------------------------");
+    // console.log(req.params);
 
     // console.log("\n----------------------------------------------------------");
     // console.log(req.body);
     // console.log("----------------------------------------------------------");
 
     let user_id = req.body.user_id;
-    let recipe_id = req.params.recipeId;
+    let reply_content = req.body.reply_content;
+    let score = req.body.score;
+    let reply_id = req.params.replyId;
 
-    const result = await postService.getRecipe(user_id, recipe_id);
+    const result = await postService.updateReply(user_id, reply_content, score, reply_id);
+    // return 값 확인
+    console.log("\n----------- return data -------------");
+    console.log(result);
+    console.log("-------------------------------------");
 
+    return res.send(result);
+};
+
+/*
+ * API No. 9
+ * API Name : 레시피 댓글 삭제
+ * [DELETE] /posts/recipe/replys/:replyId
+ */
+exports.deleteReply = async function (req, res) {
+    // console.log("\n----------------------------------------------------------");
+    // console.log(req.params);
+
+    // console.log("\n----------------------------------------------------------");
+    // console.log(req.body);
+    // console.log("----------------------------------------------------------");
+
+    let user_id = req.body.user_id;
+    let reply_id = req.params.replyId;
+
+    const result = await postService.deleteReply(user_id, reply_id);
     // return 값 확인
     console.log("\n----------- return data -------------");
     console.log(result);

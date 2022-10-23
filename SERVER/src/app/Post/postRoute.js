@@ -19,14 +19,14 @@ module.exports = function(app){
     // 6. 레시피 조회
     app.get('/posts/recipe/:recipeId', post.getRecipe);
 
-    // // 7. 레시피 댓글 생성
-    // app.get('posts/recipe/replys', post.getReply);
+    // 7. 레시피 댓글 생성
+    app.post('/posts/recipe/replys', post.postReply);
 
-    // // 8. 레시피 댓글 수정
-    // app.put('posts/recipe/replys', post.putReply);
+    // 8. 레시피 댓글 수정
+    app.put('/posts/recipe/replys/:replyId', post.putReply);
 
-    // // 9. 레시피 댓글 삭제
-    // app.delete('posts/recipe/replys', post.deleteRecipe);
+    // 9. 레시피 댓글 삭제
+    app.delete('/posts/recipe/replys/:replyId', post.deleteReply);
 
 
 };

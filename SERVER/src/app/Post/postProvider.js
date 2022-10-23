@@ -67,3 +67,43 @@ exports.printRecipe = async function (recipe_id) {
 
     return result;
 };
+
+exports.printReply = async function (recipe_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.selectReply(connection, recipe_id);
+    connection.release();
+
+    return result;
+};
+
+exports.addReply = async function (recipe_id, reply_user_id, reply_nickname, reply_content, reply_score) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.insertIntoReply(connection, recipe_id, reply_user_id, reply_nickname, reply_content, reply_score);
+    connection.release();
+
+    return result;
+};
+
+exports.retrieveReplyOwnerId = async function (reply_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.selectReplyOwnerId(connection, reply_id);
+    connection.release();
+
+    return result;
+};
+
+exports.modifyReply = async function (reply_content, score, user_nickname) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.updateSetReply(connection, reply_content, score, user_nickname);
+    connection.release();
+
+    return result;
+};
+
+exports.removeReply = async function (reply_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.deleteReply(connection, reply_id);
+    connection.release();
+
+    return result;
+};

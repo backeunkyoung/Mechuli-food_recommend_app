@@ -12,17 +12,17 @@ exports.foodScoreIsExist = async function (user_id, menu_id) {
     return result;
 };
 
-exports.scoreADD = async function (user_id, menu_id, user_score) {
+exports.scoreADD = async function (user_id, menu_id, score) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const result = await recommendDao.insertIntoUserScore(connection, user_id, menu_id, user_score);
+    const result = await recommendDao.insertIntoUserScore(connection, user_id, menu_id, score);
     connection.release();
 
     return result;
 };
 
-exports.scoreModify = async function (user_id, menu_id, user_score) {
+exports.scoreModify = async function (user_id, menu_id, score) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const result = await recommendDao.updateSetUserScore(connection, user_id, menu_id, user_score);
+    const result = await recommendDao.updateSetUserScore(connection, user_id, menu_id, score);
     connection.release();
 
     return result;
