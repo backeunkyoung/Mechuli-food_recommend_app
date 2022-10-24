@@ -1,5 +1,5 @@
 # import matplotlib.pyplot as plt
-# import seaborn as snspip
+import seaborn as snspip
 import pandas as pd
 import numpy as np
 import sys
@@ -44,10 +44,9 @@ class MatrixFactorization():
             cost = self.cost()
             self._training_process.append((epoch, cost))
 
-            # # print status
-            # if self._verbose == True and ((epoch + 1) % 2 == 0):
+            # print status
+            # if self._verbose == True and ((epoch + 1) % 10 == 0):
             #     print("Iteration: %d ; cost = %.4f" % (epoch + 1, cost))
-
 
     def cost(self):
         xi, yi = self._R.nonzero()
@@ -78,7 +77,6 @@ class MatrixFactorization():
         self._P[i, :] += self._learning_rate * dp
         self._Q[j, :] += self._learning_rate * dq
 
-
     def get_prediction(self, i, j):
 
         return self._b + self._b_P[i] + self._b_Q[j] + self._P[i, :].dot(self._Q[j, :].T)
@@ -87,24 +85,23 @@ class MatrixFactorization():
     def get_complete_matrix(self):
         return self._b + self._b_P[:, np.newaxis] + self._b_Q[np.newaxis:, ] + self._P.dot(self._Q.T)
 
-
     def print_results(self):
-        # if self.print:
-        #     # print("User Latent P:")
-        #     # print(self._P)
-        #     # print("Item Latent Q:")
-        #     # print(self._Q.T)
-        #     # print("P x Q:")
-        #     # print(self._P.dot(self._Q.T))
-        #     # print("bias:")
-        #     # print(self._b)
-        #     # print("User Latent bias:")
-        #     # print(self._b_P)
-        #     # print("Item Latent bias:")
-        #     # print(self._b_Q)
-        #     print("Final R matrix:")
-        #     print(self.get_complete_matrix())
-        #     print("Final RMSE:")
-        #     print(self._training_process[self._epochs-1][1])
+        if self.print:
+            # print("User Latent P:")
+            # print(self._P)
+            # print("Item Latent Q:")
+            # print(self._Q.T)
+            # print("P x Q:")
+            # print(self._P.dot(self._Q.T))
+            # print("bias:")
+            # print(self._b)
+            # print("User Latent bias:")
+            # print(self._b_P)
+            # print("Item Latent bias:")
+            # print(self._b_Q)
+            print("Final R matrix:")
+            print(self.get_complete_matrix())
+            print("Final RMSE:")
+            print(self._training_process[self._epochs-1][1])
         a = self.get_complete_matrix()
         return a
