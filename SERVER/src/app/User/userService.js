@@ -3,6 +3,60 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const {response} = require("../../../config/response");
 const {errResponse} = require("../../../config/response");
 
+exports.signUpLowVer = async function (user_id, user_pw, user_nickname, signUpRatings) {
+    try {
+        console.log("\n----------------------------------------------------------");
+        console.log("user_id : " + user_id);
+        console.log("user_id : " + user_pw);
+        console.log("user_nickname : " + user_nickname);
+        console.log("signUpRatings : " + JSON.stringify(signUpRatings));
+        console.log("----------------------------------------------------------");
+        
+        var rateStr = signUpRatings.substring(1, signUpRatings.length-1);   // 중괄호{} 제거
+        rateStr = rateStr.replace(/\s/gi, "");  // 띄어쓰기 제거
+        // console.log(rateStr);
+
+        var rateArr = rateStr.split(",");   // , 기준으로 잘라 배열로 넣기
+
+        var originMap = new Map();
+        for (var data of rateArr) {
+            var arr = data.split("=");
+            originMap.set(arr[0], arr[1]);
+        }
+
+        let menu_id = [];
+        let score = [];
+
+        for (var [key, value] of originMap) { // save foodId
+            // console.log(key + " " + value);
+            menu_id.push(key); score.push(value);
+        }
+
+        try {
+            await userProvider.userSignUp(user_id, user_pw, user_nickname);
+
+            await userProvider.userRatingAdd(user_id, menu_id[0], menu_id[1], menu_id[2], menu_id[3], menu_id[4], score[0], score[1], score[2], score[3], score[4]);
+
+            return response(baseResponse.SUCCESS);
+
+        } catch(err) {
+            console.log("\n----------------------------------------------------------");
+            console.log(err);
+            console.log("----------------------------------------------------------");
+
+            return errResponse(baseResponse.DB_ERROR);
+        }
+
+    } catch(err) {
+        console.log("\n----------------------------------------------------------");
+        console.log(err);
+        console.log("----------------------------------------------------------");
+
+        return errResponse(baseResponse.SERVER_ERROR);
+    }
+};
+
+
 exports.signUp = async function (user_id, user_pw, user_nickname, signUpRatings) {
     try {
         console.log("\n----------------------------------------------------------");

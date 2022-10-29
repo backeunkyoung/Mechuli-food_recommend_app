@@ -14,7 +14,9 @@ exports.putUsers = async function (req, res) {
     let user_nickname = req.body.nickname;
     let signUpRatings = req.body.signUpRatings;
 
-    const result = await userService.signUp(user_id, user_pw, user_nickname, signUpRatings);
+    // const result = await userService.signUp(user_id, user_pw, user_nickname, signUpRatings);
+    const result = await userService.signUpLowVer(user_id, user_pw, user_nickname, signUpRatings);
+
 
     // return 값 확인
     console.log("\n----------- return data -------------");
@@ -23,6 +25,7 @@ exports.putUsers = async function (req, res) {
 
     return res.send(result);
 };
+
 
 /*
  * API No. 2
