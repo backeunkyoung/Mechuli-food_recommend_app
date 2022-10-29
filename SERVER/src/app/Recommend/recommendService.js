@@ -2,7 +2,37 @@ const recommendProvider = require("./recommendProvider");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response} = require("../../../config/response");
 const {errResponse} = require("../../../config/response");
+const Promise = require('promise');
 const PythonShell = require('python-shell').PythonShell;
+
+// let getRecommend = function(user_id) {
+//     return new Promise(function(resolved, rejected) {
+//         // 파이썬 코드에 user_id 넘겨 줌
+//         var options = {
+//             mode: 'text',
+//             pythonPath: '',
+//             pythonOptions: ['-u'],
+//             scriptPath: 'D:/GitHub/food_recommend_app/SERVER/python',
+//             args : user_id,
+//             encoding : 'utf8'
+//         }
+        
+//         // TODO : 현재 PythonShell이 끝나기 전에 return값을 보내버림 => 순서대로 동작하도록 수정 필요
+//         let result = PythonShell.run('main.py', options, function(err, results) {
+//             console.log("pythonShell 실행중");
+//             if (err) {
+//                 console.log("err : " + err);
+//                 return "파이썬 통신 에러";
+//             }
+//             console.log(result[0]);
+
+//             if (result != null) {
+//                 resolved = result[0];
+//             }
+//         });
+//     });
+// };
+
 
 exports.getUserRecommendMenuList = async function (user_id) {
     try {
@@ -12,6 +42,14 @@ exports.getUserRecommendMenuList = async function (user_id) {
 
         let menu_id_1; let menu_id_2; let menu_id_3; let menu_id_4; let menu_id_5;
         let menu_id_6; let menu_id_7; let menu_id_8; let menu_id_9; let menu_id_10;
+
+        // let idList = getRecommend(user_id);
+
+        // console.log("\n--- getRecommend ---");
+        // console.log(idList);
+        // console.log("--------------------");
+
+        // return "true";
 
         // 파이썬 코드에 user_id 넘겨 줌
         var options = {
@@ -24,7 +62,8 @@ exports.getUserRecommendMenuList = async function (user_id) {
         }
         
         // TODO : 현재 PythonShell이 끝나기 전에 return값을 보내버림 => 순서대로 동작하도록 수정 필요
-        PythonShell.run('main.py', options, function(err, results) {
+        let result = await PythonShell.run('main.py', options, function(err, results) {
+            console.log("pythonShell 실행중");
             if (err) {
                 console.log("err : " + err);
                 return "파이썬 통신 에러";
@@ -59,6 +98,8 @@ exports.getUserRecommendMenuList = async function (user_id) {
    
                 }
             }
+
+            // console.log("result : " + result);
         });
 
     } catch(err) {

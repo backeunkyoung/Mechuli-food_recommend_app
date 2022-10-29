@@ -97,6 +97,7 @@ exports.idOverlapCheck = async function (user_id) {
             for (let data of rows) {
                 isUser = data.success;
             }
+            console.log(isUser);
 
             if (isUser == "1") {
                 return response(baseResponse.SIGNUP_REDUNDANT_ID);
