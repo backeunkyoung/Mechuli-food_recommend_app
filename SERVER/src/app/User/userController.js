@@ -11,7 +11,7 @@ exports.putUsers = async function (req, res) {
     // console.log("----------------------------------------------------------");
     let user_id = req.body.user_id;
     let user_pw = req.body.user_pw;
-    let user_nickname = req.body.nickname;
+    let user_nickname = req.body.user_nickname;
     let signUpRatings = req.body.signUpRatings;
 
     // const result = await userService.signUp(user_id, user_pw, user_nickname, signUpRatings);
