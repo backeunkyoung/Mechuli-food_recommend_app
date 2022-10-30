@@ -22,9 +22,10 @@ exports.getUser = async function (req, res) {
  * [GET] /foods/result?keyword=
  */
 exports.getResult = async function (req, res) {
-    // console.log("\n----------------------------------------------------------");
-    // console.log(req.query.keyword);
-    // console.log("----------------------------------------------------------");
+    console.log("\n----------------------------------------------------------");
+    console.log(req.query);
+    console.log(req.query.keyword);
+    console.log("----------------------------------------------------------");
 
     let keyword = req.query.keyword;
     console.log("get keyword : " + keyword);
