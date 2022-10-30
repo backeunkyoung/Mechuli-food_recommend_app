@@ -27,7 +27,7 @@ exports.getResult = async function (req, res) {
     // console.log("----------------------------------------------------------");
 
     let keyword = req.query.keyword;
-    console.log(keyword);
+    console.log("get keyword : " + keyword);
 
     // Base64 Decoding
     let base64DecodedText = Buffer.from(keyword, "base64").toString('utf8');

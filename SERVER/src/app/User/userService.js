@@ -7,7 +7,7 @@ exports.signUpLowVer = async function (user_id, user_pw, user_nickname, signUpRa
     try {
         console.log("\n----------------------------------------------------------");
         console.log("user_id : " + user_id);
-        console.log("user_id : " + user_pw);
+        console.log("user_pw : " + user_pw);
         console.log("user_nickname : " + user_nickname);
         console.log("signUpRatings : " + JSON.stringify(signUpRatings));
         console.log("----------------------------------------------------------");
