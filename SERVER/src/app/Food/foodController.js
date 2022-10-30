@@ -29,7 +29,6 @@ exports.getResult = async function (req, res) {
     let keyword = req.query.keyword;
     console.log("get keyword : " + keyword);
 
-    keyword = undefined;
     if (keyword == undefined) {
         keyword = "";
     }
