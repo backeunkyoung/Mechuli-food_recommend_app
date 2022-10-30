@@ -27,9 +27,15 @@ exports.getResult = async function (req, res) {
     // console.log("----------------------------------------------------------");
 
     let keyword = req.query.keyword;
-    keyword = "%" + keyword + "%";
+    console.log(keyword);
 
-    const result = await foodService.getFoodScoreModifyImgList(keyword);
+    // Base64 Decoding
+    let base64DecodedText = Buffer.from(keyword, "base64").toString('utf8');
+    console.log("Base64 Decoded Text : ", base64DecodedText);
+
+    base64DecodedText = "%" + base64DecodedText + "%";
+
+    const result = await foodService.getFoodScoreModifyImgList(base64DecodedText);
 
     // return 값 확인
     console.log("\n----------- return data -------------");
