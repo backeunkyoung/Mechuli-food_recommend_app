@@ -23,12 +23,16 @@ exports.getUser = async function (req, res) {
  */
 exports.getResult = async function (req, res) {
     console.log("\n----------------------------------------------------------");
-    console.log(req.query);
     console.log(req.query.keyword);
     console.log("----------------------------------------------------------");
 
     let keyword = req.query.keyword;
     console.log("get keyword : " + keyword);
+
+    keyword = undefined;
+    if (keyword == undefined) {
+        keyword = "";
+    }
 
     // Base64 Decoding
     let base64DecodedText = Buffer.from(keyword, "base64").toString('utf8');
