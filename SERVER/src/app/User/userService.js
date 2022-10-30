@@ -56,7 +56,6 @@ exports.signUpLowVer = async function (user_id, user_pw, user_nickname, signUpRa
     }
 };
 
-
 exports.signUp = async function (user_id, user_pw, user_nickname, signUpRatings) {
     try {
         console.log("\n----------------------------------------------------------");
@@ -151,12 +150,13 @@ exports.idOverlapCheck = async function (user_id) {
             for (let data of rows) {
                 isUser = data.success;
             }
-            console.log(isUser);
 
             if (isUser == "1") {
+                console.log("isUser : " + isUser + " , id 사용 불가(중복)");
                 return response(baseResponse.SIGNUP_REDUNDANT_ID);
             }
             else if (isUser == "0") {
+                console.log("isUser : " + isUser + " , id 사용 가능");
                 return response(baseResponse.SUCCESS);
             }
 
