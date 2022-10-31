@@ -18,12 +18,12 @@ conn = pymysql.connect(host='13.209.81.127', user='user', password='user', db='m
 # query문 csv 파일로 저장
 query = 'SELECT * FROM mechuli_schema.userinfo_table;'
 df = pd.read_sql_query(query, conn)
-df.to_csv(r'D:/GitHub/food_recommend_app/SERVER/python/csv/userinfo_table_utf8_2.csv', index=False)
+df.to_csv(r'D:/GitHub/food_recommend_app/SERVER/python/csv/userinfo_table_utf8.csv', index=False)
 
 query = 'SELECT * FROM mechuli_schema.menu_rating_table;'
 df = pd.read_sql_query(query, conn)
-df.to_csv(r'D:/GitHub/food_recommend_app/SERVER/python/csv/menu_rating_table_utf8_2.csv', index=False)
+df.to_csv(r'D:/GitHub/food_recommend_app/SERVER/python/csv/menu_rating_table_utf8.csv', index=False)
 
 query = 'SELECT * FROM mechuli_schema.menu_table;'
 df = pd.read_sql_query(query, conn)
-df.to_csv(r'D:/GitHub/food_recommend_app/SERVER/python/csv/menu_table_utf8_2.csv', index=False)
+df.to_csv(r'D:/GitHub/food_recommend_app/SERVER/python/csv/menu_table_utf8.csv', index=False)

@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 
 // 메뉴 정보를 가져옴
 async function selectRecommendmenu(connection, menu_id_1, menu_id_2, menu_id_3, menu_id_4, menu_id_5, menu_id_6, menu_id_7, menu_id_8, menu_id_9, menu_id_10) {
-    const query = mysql.format(`SELECT * FROM mechuli_schema.menu_table
+    const query = mysql.format(`SELECT menu_id, cvs_name, menu_name, menu_image FROM mechuli_schema.menu_table
     WHERE menu_id = ? OR menu_id = ? OR menu_id = ? OR menu_id = ? OR menu_id = ?
     OR menu_id = ? OR menu_id = ? OR menu_id = ? OR menu_id = ? OR menu_id = ?;`, [menu_id_1, menu_id_2, menu_id_3, menu_id_4, menu_id_5, menu_id_6, menu_id_7, menu_id_8, menu_id_9, menu_id_10]);
     const Rows = await connection.query(query);
