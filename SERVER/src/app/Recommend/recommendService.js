@@ -88,7 +88,7 @@ exports.getUserRecommendMenuList = async function (user_id) {
         console.log("user_id : " + user_id);
         console.log("----------------------------------------------------------");
 
-        // await createCSV();
+        await createCSV();
 
         let result = await getRecommendList(user_id);
 

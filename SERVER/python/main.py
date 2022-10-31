@@ -21,18 +21,18 @@ getUserId = getData[1]
 
 ############# 입력파일 지정
 if __name__ == "__main__":
-    # df_menu = pd.read_csv('./csv/cvs_food_name.csv')
-    # df_ratings  = pd.read_csv('./csv/rating_rand.csv') # userId, foodId, rating
-    # df_userinfo = pd.read_csv('./csv/user_random_data_export.csv')
 
     df_menu = pd.read_csv('D:/GitHub/food_recommend_app/SERVER/python/csv/menu_table_utf8.csv') # menu_id, menu_name, cvs_name, type_1, menu_image
     df_ratings  = pd.read_csv('D:/GitHub/food_recommend_app/SERVER/python/csv/menu_rating_table_utf8.csv')  # user_id, menu_id, score
     df_userinfo = pd.read_csv('D:/GitHub/food_recommend_app/SERVER/python/csv/userinfo_table_utf8.csv') # user_id, user_pw, user_nickname
 
     ###### 입력받을 곳
-    # userid = 50  ## 추천을 받을 userID 정보 입력
-    userid = int(getUserId)  # 추천을 받을 userID 정보 입력
-    # print(df_userinfo_2[df_userinfo_2['user_id'] == userid])
+    # userid = 15  ## 추천을 받을 userID 정보 입력
+    # userid = 'lime20' ## 추천을 받을 userID 정보 입력
+    userid = getUserId  # 추천을 받을 userID 정보 입력
+
+    # print(df_userinfo_2['user_id'] == userid_2)
+    # user_index = df_userinfo[df_userinfo['user_id'] == userid].index[0]
     user_index = df_userinfo[df_userinfo['user_id'] == userid].index[0]
     # print(user_index)
 
@@ -46,11 +46,9 @@ if __name__ == "__main__":
         columns='menu_id',
         values='score'
     ).fillna(0)
-    #print(df_userinfo)
-    df_user_food_ratings = df_user_food_ratings.drop([0])
-    #print(df_user_food_ratings)
 
     matrix = df_user_food_ratings.values
+
     # user_ratings_mean은 사용자의 평균 평점
     user_ratings_mean = np.mean(matrix, axis=1)
     matrix_user_mean = matrix - user_ratings_mean.reshape(-1, 1)
@@ -61,10 +59,10 @@ if __name__ == "__main__":
     factorizer.print_results()
 
     resultM = factorizer.print_results()
-    #print(resultM.shape)
+    # print(resultM.shape)
     ## df_menu = df_menu.drop(['image'], axis=1)
     #print(resultM[userid-1, :])
-    df_menu['score'] = resultM[userid-1, :]
+    df_menu['score'] = resultM[user_index-1, :]
     # print("MF 결과 출력")
     # print(df_menu.head())
     rank = df_menu.sort_values('score', ascending=False)
