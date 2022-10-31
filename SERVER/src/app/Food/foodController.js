@@ -34,12 +34,11 @@ exports.getResult = async function (req, res) {
     }
 
     // Base64 Decoding
-    let base64DecodedText = Buffer.from(keyword, "base64").toString('utf8');
-    console.log("Base64 Decoded Text : ", base64DecodedText);
+    // let base64DecodedText = Buffer.from(keyword, "base64").toString('utf8');
+    // console.log("Base64 Decoded Text : ", base64DecodedText);
 
-    base64DecodedText = "%" + base64DecodedText + "%";
-
-    const result = await foodService.getFoodScoreModifyImgList(base64DecodedText);
+    keyword = "%" + keyword + "%";
+    const result = await foodService.getFoodScoreModifyImgList(keyword);
 
     // return 값 확인
     console.log("\n----------- return data -------------");

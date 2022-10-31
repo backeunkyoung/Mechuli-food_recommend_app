@@ -32,6 +32,7 @@ if __name__ == "__main__":
     ###### 입력받을 곳
     # userid = 50  ## 추천을 받을 userID 정보 입력
     userid = int(getUserId)  # 추천을 받을 userID 정보 입력
+    # print(df_userinfo_2[df_userinfo_2['user_id'] == userid])
     user_index = df_userinfo[df_userinfo['user_id'] == userid].index[0]
     # print(user_index)
 

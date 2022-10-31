@@ -5,6 +5,32 @@ const {errResponse} = require("../../../config/response");
 const Promise = require('promise');
 const PythonShell = require('python-shell').PythonShell;
 
+async function createCSV() {
+    const { success, err = '', results }  = await new Promise((resolve, reject) => {
+
+        var options = {
+            mode: 'text',
+            pythonPath: '',
+            pythonOptions: ['-u'],
+            scriptPath: 'D:/GitHub/food_recommend_app/SERVER/python',
+            encoding : 'utf8'
+        }
+
+        PythonShell.run('getCSV.py', options, function(err, results) {
+            console.log("\n-- CSV 파일 생성중 --");
+            if (err) {
+                reject({ success : false, err});
+            } else {
+                resolve({ success : true, results });
+            }
+        });
+    });
+
+    if (success) {
+        return results;
+    }
+}
+
 async function getRecommendList(user_id) {
     const { success, err = '', results }  = await new Promise((resolve, reject) => {
         // try {
@@ -22,7 +48,7 @@ async function getRecommendList(user_id) {
         }
 
         PythonShell.run('main.py', options, function(err, results) {
-            console.log("pythonShell 실행중");
+            console.log("\n-- 추천 알고리즘 실행중 --");
             if (err) {
                 reject({ success : false, err});
             } else {
@@ -54,10 +80,6 @@ async function getRecommendList(user_id) {
     if (success) {
         return results;
     }
-    else {
-        console.log(err);
-        return err;
-    }
 }
 
 exports.getUserRecommendMenuList = async function (user_id) {
@@ -66,7 +88,10 @@ exports.getUserRecommendMenuList = async function (user_id) {
         console.log("user_id : " + user_id);
         console.log("----------------------------------------------------------");
 
+        // await createCSV();
+
         let result = await getRecommendList(user_id);
+
         return response(baseResponse.SUCCESS, result);
 
     } catch(err) {

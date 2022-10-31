@@ -6,7 +6,8 @@ const pool = mysql.createPool({
     port : 3306,
     user : 'user',
     password : 'user',
-    database : 'mechuli_schema'
+    database : 'mechuli_schema',
+    charset : 'utf8'
 });
 
 module.exports = {

@@ -152,11 +152,9 @@ exports.idOverlapCheck = async function (user_id) {
             }
 
             if (isUser == "1") {
-                console.log("isUser : " + isUser + " , id 사용 불가(중복)");
                 return response(baseResponse.SIGNUP_REDUNDANT_ID);
             }
             else if (isUser == "0") {
-                console.log("isUser : " + isUser + " , id 사용 가능");
                 return response(baseResponse.SUCCESS);
             }
 
