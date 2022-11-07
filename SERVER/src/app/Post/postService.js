@@ -316,7 +316,7 @@ exports.updateReply = async function (user_id, reply_content, score, reply_id) {
             console.log("user_nickname : " + user_nickname);
             console.log("----------------------------------------------------------");
 
-            await postProvider.modifyReply(reply_content, score, user_nickname);
+            await postProvider.modifyReply(reply_id, reply_content, score, user_nickname);
 
             return response(baseResponse.SUCCESS);
 

@@ -17,7 +17,6 @@ async function selectRecipeOwnerId(connection, recipe_id) {
 }
 
 // 전체 레시피 리스트(미리보기) 조회
-// TODO : recipe_reply_count, recipe_average_score 추가 해서 출력
 async function selectAllRecipe(connection) {
     const query = mysql.format(`SELECT DISTINCT recipe.recipe_id, recipe.user_id, recipe.user_nickname, recipe.recipe_title,
             (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
@@ -32,7 +31,6 @@ async function selectAllRecipe(connection) {
 }
 
 // 검색 키워드에 따른 전체 레시피 리스트(미리보기) 조회
-// TODO : recipe_reply_count, recipe_average_score 추가 해서 출력
 async function selectWhereLikeAllRecipe(connection, keyword) {
     const query = mysql.format(`SELECT DISTINCT recipe.recipe_id, recipe.user_id, recipe.user_nickname, recipe.recipe_title,
             (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
@@ -111,8 +109,8 @@ async function selectReplyOwnerId(connection, reply_id) {
 }
 
 // 레시피 댓글 수정
-async function updateSetReply(connection, reply_content, score, user_nickname) {
-    const query = mysql.format(`UPDATE mechuli_schema.reply_table SET reply_nickname = ?, reply_content = ?, reply_score = ?;`, [user_nickname, reply_content, score]);
+async function updateSetReply(connection, reply_id, reply_content, score, user_nickname) {
+    const query = mysql.format(`UPDATE mechuli_schema.reply_table SET reply_nickname = ?, reply_content = ?, reply_score = ? WHERE reply_id=?;`, [user_nickname, reply_content, score, reply_id]);
     const Rows = await connection.query(query);
 
     return Rows[0];

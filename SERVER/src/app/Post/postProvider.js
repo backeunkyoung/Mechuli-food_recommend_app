@@ -92,9 +92,9 @@ exports.retrieveReplyOwnerId = async function (reply_id) {
     return result;
 };
 
-exports.modifyReply = async function (reply_content, score, user_nickname) {
+exports.modifyReply = async function (reply_id, reply_content, score, user_nickname) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const result = await postDao.updateSetReply(connection, reply_content, score, user_nickname);
+    const result = await postDao.updateSetReply(connection, reply_id, reply_content, score, user_nickname);
     connection.release();
 
     return result;
