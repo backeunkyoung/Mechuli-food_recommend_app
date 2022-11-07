@@ -1,4 +1,5 @@
 const foodService = require("./foodService");
+const urlencode = require('urlencode');
 
 /*
  * API No. 1
@@ -22,23 +23,28 @@ exports.getUser = async function (req, res) {
  * [GET] /foods/result?keyword=
  */
 exports.getResult = async function (req, res) {
-    console.log("\n----------------------------------------------------------");
-    console.log(req.query.keyword);
-    console.log("----------------------------------------------------------");
+    // console.log("\n----------------------------------------------------------");
+    // console.log(JSON.stringify(req.headers['keyword']));
+    // console.log("----------------------------------------------------------");
 
-    let keyword = req.query.keyword;
+    // let keyword = req.query.keyword;
+    let keyword = req.headers['keyword'];
     console.log("get keyword : " + keyword);
 
     if (keyword == undefined) {
         keyword = "";
     }
 
+    // URL Decoding
+    let urlDecodedText = urlencode.decode(keyword);
+    console.log("decoding keyword : " + urlDecodedText);
+
     // Base64 Decoding
     // let base64DecodedText = Buffer.from(keyword, "base64").toString('utf8');
     // console.log("Base64 Decoded Text : ", base64DecodedText);
 
-    keyword = "%" + keyword + "%";
-    const result = await foodService.getFoodScoreModifyImgList(keyword);
+    urlDecodedText = "%" + urlDecodedText + "%";
+    const result = await foodService.getFoodScoreModifyImgList(urlDecodedText);
 
     // return 값 확인
     console.log("\n----------- return data -------------");
