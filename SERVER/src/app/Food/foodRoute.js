@@ -8,6 +8,6 @@ module.exports = function(app){
     app.get('/foods/result', food.getResult);
 
     // 3. 평점 추가(수정) 상세 페이지 음식 정보 받아오기
-    app.get('/foods/:menuId', food.getFoodMenu);
+    app.get('/foods/:userId/:menuId', food.getFoodMenu);
 
 };

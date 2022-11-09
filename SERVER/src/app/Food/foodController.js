@@ -57,7 +57,7 @@ exports.getResult = async function (req, res) {
 /*
  * API No. 3
  * API Name : 평점 추가(수정) 상세 페이지 음식 정보 받아오기
- * [GET] /foods/:menuId
+ * [GET] /:userId/:menuId
  */
 exports.getFoodMenu = async function (req, res) {
     // console.log("\n----------------------------------------------------------");
@@ -67,7 +67,7 @@ exports.getFoodMenu = async function (req, res) {
     // console.log(req.body);
     // console.log("----------------------------------------------------------");
 
-    let user_id = req.body.user_id;
+    let user_id = req.params.userId;
     let menu_id = req.params.menuId;
 
     const result = await foodService.getFoodInfo(user_id, menu_id);
