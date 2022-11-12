@@ -19,12 +19,13 @@ async function selectRecipeOwnerId(connection, recipe_id) {
 // 전체 레시피 리스트(미리보기) 조회
 async function selectAllRecipe(connection) {
     const query = mysql.format(`SELECT DISTINCT recipe.recipe_id, recipe.user_id, recipe.user_nickname, recipe.recipe_title,
-            (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
-            (SELECT ROUND (AVG(reply_score), 2) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_average_score',
-            recipe.update_time, recipe.recipe_img_url_1
-        FROM mechuli_schema.recipe_table AS recipe
-        LEFT JOIN mechuli_schema.reply_table AS reply
-        ON recipe.recipe_id = reply.recipe_id;`);
+    (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
+    (SELECT ROUND (AVG(reply_score), 2) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_average_score',
+    (SELECT DATE_FORMAT(update_time, '%Y-%m-%d(%a) %H:%i') FROM mechuli_schema.recipe_table WHERE recipe_id = recipe.recipe_id) AS 'update_time',
+    recipe.recipe_img_url_1
+    FROM mechuli_schema.recipe_table AS recipe
+    LEFT JOIN mechuli_schema.reply_table AS reply
+    ON recipe.recipe_id = reply.recipe_id;`);
     const Rows = await connection.query(query);
 
     return Rows[0];
@@ -78,7 +79,16 @@ async function deleteRecipe(connection, recipe_id) {
 
 // 레시피 조회
 async function selectRecipe(connection, recipe_id) {
-    const query = mysql.format(`SELECT * FROM mechuli_schema.recipe_table WHERE recipe_id = ?;`, [recipe_id]);
+    const query = mysql.format(`SELECT DISTINCT recipe.recipe_id, recipe.user_id, recipe.user_nickname,
+    (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
+    (SELECT ROUND (AVG(reply_score), 2) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_average_score',
+    recipe.recipe_title, recipe.recipe_ingredient, recipe.recipe_cost, recipe.recipe_content,
+    (SELECT DATE_FORMAT(create_time, '%Y-%m-%d(%a) %H:%i') FROM mechuli_schema.recipe_table WHERE recipe_id = recipe.recipe_id) AS 'create_time',
+    (SELECT DATE_FORMAT(update_time, '%Y-%m-%d(%a) %H:%i') FROM mechuli_schema.recipe_table WHERE recipe_id = recipe.recipe_id) AS 'update_time',
+    recipe.recipe_img_url_1, recipe.recipe_img_url_2, recipe.recipe_img_url_3, recipe.recipe_img_url_4, recipe.recipe_img_url_5
+    FROM mechuli_schema.recipe_table AS recipe
+    LEFT JOIN mechuli_schema.reply_table AS reply
+    ON recipe.recipe_id = reply.recipe_id WHERE recipe.recipe_id = ?;`, [recipe_id]);
     const Rows = await connection.query(query);
 
     return Rows[0];
@@ -86,7 +96,10 @@ async function selectRecipe(connection, recipe_id) {
 
 // 레시피 댓글 조회
 async function selectReply(connection, recipe_id) {
-    const query = mysql.format(`SELECT reply_id, reply_user_id, reply_nickname, reply_content, reply_score, reply_create_time FROM mechuli_schema.reply_table WHERE recipe_id = ?;`, [recipe_id]);
+    const query = mysql.format(`
+    SELECT reply_id, reply_user_id, reply_nickname, reply_content, reply_score,
+    DATE_FORMAT(reply_create_time, '%Y-%m-%d(%a) %H:%i') AS 'reply_create_time'
+    FROM mechuli_schema.reply_table WHERE recipe_id = "1";`, [recipe_id]);
     const Rows = await connection.query(query);
 
     return Rows[0];

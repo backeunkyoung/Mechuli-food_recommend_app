@@ -6,11 +6,31 @@ const {errResponse} = require("../../../config/response");
 exports.getPreviewRecipe = async function () {
     try {
         const rows = await postProvider.printPreviewRecipe();
-        console.log("\n----------------------------------------------------------");
-        console.log(rows);
-        console.log("----------------------------------------------------------");
+        // console.log("\n----------------------------------------------------------");
+        // console.log(rows);
+        // console.log("----------------------------------------------------------");
 
-        return response(baseResponse.SUCCESS, rows);
+        let returnRows = [];
+
+        for (let data of rows) {
+            let recipe_id = data.recipe_id;
+            let user_id = data.user_id;
+            let user_nickname = data.user_nickname;
+            let recipe_title = data.recipe_title;
+            let recipe_reply_count = data.recipe_reply_count;
+            let recipe_average_score = data.recipe_average_score;
+            let update_time = data.update_time;
+            let recipe_img_url_1 = data.recipe_img_url_1;
+
+            let resultRows = {"recipe_id" : recipe_id, "user_id" : user_id, "user_nickname" : user_nickname
+                            , "recipe_title" : recipe_title, "recipe_reply_count" : recipe_reply_count
+                            , "recipe_average_score" : recipe_average_score, "update_time" : update_time
+                            , "recipe_img_url_1" : recipe_img_url_1};
+
+            returnRows.push(resultRows);
+        }
+
+        return response(baseResponse.SUCCESS, returnRows);
 
     } catch(err) {
         console.log("\n----------------------------------------------------------");
@@ -41,17 +61,17 @@ exports.getSearchPreviewRecipe = async function (keyword) {
 
 exports.CreateRecipe = async function (user_id, recipe_title, recipe_ingredient, recipe_cost, recipe_content, recipe_img_url_1, recipe_img_url_2, recipe_img_url_3, recipe_img_url_4, recipe_img_url_5) {
     try {
-        console.log("\n----------------------------------------------------------");
-        console.log("user_id : " + user_id);
-        console.log("recipe_title : " + recipe_title);
-        console.log("recipe_ingredient : " + recipe_ingredient);
-        console.log("recipe_cost : " + recipe_cost);
-        console.log("recipe_content : " + recipe_content);
-        console.log("recipe_img_url_1 : " + recipe_img_url_1);
-        console.log("recipe_img_url_2 : " + recipe_img_url_2);
-        console.log("recipe_img_url_3 : " + recipe_img_url_3);
-        console.log("recipe_img_url_4 : " + recipe_img_url_4);
-        console.log("recipe_img_url_5 : " + recipe_img_url_5);
+        // console.log("\n----------------------------------------------------------");
+        // console.log("user_id : " + user_id);
+        // console.log("recipe_title : " + recipe_title);
+        // console.log("recipe_ingredient : " + recipe_ingredient);
+        // console.log("recipe_cost : " + recipe_cost);
+        // console.log("recipe_content : " + recipe_content);
+        // console.log("recipe_img_url_1 : " + recipe_img_url_1);
+        // console.log("recipe_img_url_2 : " + recipe_img_url_2);
+        // console.log("recipe_img_url_3 : " + recipe_img_url_3);
+        // console.log("recipe_img_url_4 : " + recipe_img_url_4);
+        // console.log("recipe_img_url_5 : " + recipe_img_url_5);
 
         try {
             // 사용자 닉네임 가져오기
@@ -60,8 +80,8 @@ exports.CreateRecipe = async function (user_id, recipe_title, recipe_ingredient,
             for (let data of getNickname) {
                 user_nickname = data.user_nickname;
             }
-            console.log("user_nickname : " + user_nickname);
-            console.log("----------------------------------------------------------");
+            // console.log("user_nickname : " + user_nickname);
+            // console.log("----------------------------------------------------------");
 
             await postProvider.addRecipe(user_id, user_nickname, recipe_title, recipe_ingredient, recipe_cost, recipe_content, recipe_img_url_1, recipe_img_url_2, recipe_img_url_3, recipe_img_url_4, recipe_img_url_5);
 
@@ -86,18 +106,18 @@ exports.CreateRecipe = async function (user_id, recipe_title, recipe_ingredient,
 
 exports.updateRecipe = async function (user_id, recipe_title, recipe_ingredient, recipe_cost, recipe_content, recipe_img_url_1, recipe_img_url_2, recipe_img_url_3, recipe_img_url_4, recipe_img_url_5, recipe_id) {
     try {
-        console.log("\n----------------------------------------------------------");
-        console.log("user_id : ", user_id);
-        console.log("recipe_title : " + recipe_title);
-        console.log("recipe_ingredient : " + recipe_ingredient);
-        console.log("recipe_cost : " + recipe_cost);
-        console.log("recipe_content : " + recipe_content);
-        console.log("recipe_img_url_1 : " + recipe_img_url_1);
-        console.log("recipe_img_url_2 : " + recipe_img_url_2);
-        console.log("recipe_img_url_3 : " + recipe_img_url_3);
-        console.log("recipe_img_url_4 : " + recipe_img_url_4);
-        console.log("recipe_img_url_5 : " + recipe_img_url_5);
-        console.log("recipe_id : " + recipe_id);
+        // console.log("\n----------------------------------------------------------");
+        // console.log("user_id : ", user_id);
+        // console.log("recipe_title : " + recipe_title);
+        // console.log("recipe_ingredient : " + recipe_ingredient);
+        // console.log("recipe_cost : " + recipe_cost);
+        // console.log("recipe_content : " + recipe_content);
+        // console.log("recipe_img_url_1 : " + recipe_img_url_1);
+        // console.log("recipe_img_url_2 : " + recipe_img_url_2);
+        // console.log("recipe_img_url_3 : " + recipe_img_url_3);
+        // console.log("recipe_img_url_4 : " + recipe_img_url_4);
+        // console.log("recipe_img_url_5 : " + recipe_img_url_5);
+        // console.log("recipe_id : " + recipe_id);
 
         try {
             // 사용자 id == 레시피 작성자 id인지 체크
@@ -118,8 +138,8 @@ exports.updateRecipe = async function (user_id, recipe_title, recipe_ingredient,
             for (let data of getId) {
                 user_nickname = data.user_nickname;
             }
-            console.log("user_nickname : " + user_nickname);
-            console.log("----------------------------------------------------------");
+            // console.log("user_nickname : " + user_nickname);
+            // console.log("----------------------------------------------------------");
 
             await postProvider.modifyRecipe(user_nickname, recipe_title, recipe_ingredient, recipe_cost, recipe_content, recipe_img_url_1, recipe_img_url_2, recipe_img_url_3, recipe_img_url_4, recipe_img_url_5, recipe_id);
 
@@ -144,10 +164,10 @@ exports.updateRecipe = async function (user_id, recipe_title, recipe_ingredient,
 
 exports.deleteRecipe = async function (user_id, recipe_id) {
     try {
-        console.log("\n----------------------------------------------------------");
-        console.log("user_id : ", user_id);
-        console.log("recipe_id : " + recipe_id);
-        console.log("----------------------------------------------------------");
+        // console.log("\n----------------------------------------------------------");
+        // console.log("user_id : ", user_id);
+        // console.log("recipe_id : " + recipe_id);
+        // console.log("----------------------------------------------------------");
 
         try {
             // 사용자 id == 레시피 작성자 id인지 체크
@@ -192,19 +212,21 @@ exports.getRecipe = async function (recipe_id) {
         try {
             // 레시피 정보
             const recipeRows = await postProvider.printRecipe(recipe_id);
-            console.log("\n----------------------------------------------------------");
-            console.log(recipeRows[0]);
-            console.log("----------------------------------------------------------");
+            // console.log("\n----------------------------------------------------------");
+            // console.log(recipeRows[0]);
+            // console.log("----------------------------------------------------------");
 
             // 레시피의 댓글 정보
             const replyrows = await postProvider.printReply(recipe_id);
-            console.log("\n----------------------------------------------------------");
-            console.log(replyrows);
-            console.log("----------------------------------------------------------");
+            // console.log("\n----------------------------------------------------------");
+            // console.log(replyrows);
+            // console.log("----------------------------------------------------------");
 
             recipe_id = recipeRows[0].recipe_id;
             let user_id = recipeRows[0].user_id;
             let user_nickname = recipeRows[0].user_nickname;
+            let recipe_reply_count = recipeRows[0].recipe_reply_count;
+            let recipe_average_score = recipeRows[0].recipe_average_score;
             let recipe_title = recipeRows[0].recipe_title;
             let recipe_ingredient = recipeRows[0].recipe_ingredient;
             let recipe_cost = recipeRows[0].recipe_cost;
@@ -219,7 +241,8 @@ exports.getRecipe = async function (recipe_id) {
 
             let recipe_replyList = replyrows;
 
-            let returnRows = {"recipe_id" : recipe_id, "user_id" : user_id, "user_nickname" : user_nickname, "recipe_title" : recipe_title
+            let returnRows = {"recipe_id" : recipe_id, "user_id" : user_id, "user_nickname" : user_nickname
+                                , "recipe_reply_count" : recipe_reply_count, "recipe_average_score" : recipe_average_score, "recipe_title" : recipe_title
                                 , "recipe_ingredient" : recipe_ingredient, "recipe_cost" : recipe_cost, "recipe_content" : recipe_content
                                 , "create_time" : create_time, "update_time" : update_time, "recipe_img_url_1" : recipe_img_url_1
                                 , "recipe_img_url_2" : recipe_img_url_2, "recipe_img_url_3" : recipe_img_url_3, "recipe_img_url_4" : recipe_img_url_4
@@ -246,11 +269,11 @@ exports.getRecipe = async function (recipe_id) {
 
 exports.postReply = async function (reply_user_id, recipe_id, reply_content, reply_score) {
     try {
-        console.log("\n----------------------------------------------------------");
-        console.log("reply_user_id : ", reply_user_id);
-        console.log("recipe_id : " + recipe_id);
-        console.log("reply_content : " + reply_content);
-        console.log("reply_score : " + reply_score);
+        // console.log("\n----------------------------------------------------------");
+        // console.log("reply_user_id : ", reply_user_id);
+        // console.log("recipe_id : " + recipe_id);
+        // console.log("reply_content : " + reply_content);
+        // console.log("reply_score : " + reply_score);
 
         try {
             // 사용자 닉네임 가져오기
@@ -259,8 +282,8 @@ exports.postReply = async function (reply_user_id, recipe_id, reply_content, rep
             for (let data of getNickname) {
                 reply_nickname = data.user_nickname;
             }
-            console.log("user_nickname : " + reply_nickname);
-            console.log("----------------------------------------------------------");
+            // console.log("user_nickname : " + reply_nickname);
+            // console.log("----------------------------------------------------------");
 
             const rows = await postProvider.addReply(recipe_id, reply_user_id, reply_nickname, reply_content, reply_score);
             // console.log("\n----------------------------------------------------------");
@@ -288,11 +311,11 @@ exports.postReply = async function (reply_user_id, recipe_id, reply_content, rep
 
 exports.updateReply = async function (user_id, reply_content, score, reply_id) {
     try {
-        console.log("\n----------------------------------------------------------");
-        console.log("user_id : ", user_id);
-        console.log("reply_content : " + reply_content);
-        console.log("score : " + score);
-        console.log("reply_id : " + reply_id);
+        // console.log("\n----------------------------------------------------------");
+        // console.log("user_id : ", user_id);
+        // console.log("reply_content : " + reply_content);
+        // console.log("score : " + score);
+        // console.log("reply_id : " + reply_id);
 
         try {
             // 사용자 id == 댓글 작성자 id인지 체크
@@ -313,8 +336,8 @@ exports.updateReply = async function (user_id, reply_content, score, reply_id) {
             for (let data of getId) {
                 user_nickname = data.user_nickname;
             }
-            console.log("user_nickname : " + user_nickname);
-            console.log("----------------------------------------------------------");
+            // console.log("user_nickname : " + user_nickname);
+            // console.log("----------------------------------------------------------");
 
             await postProvider.modifyReply(reply_id, reply_content, score, user_nickname);
 
@@ -339,10 +362,10 @@ exports.updateReply = async function (user_id, reply_content, score, reply_id) {
 
 exports.deleteReply = async function (user_id, reply_id) {
     try {
-        console.log("\n----------------------------------------------------------");
-        console.log("user_id : ", user_id);
-        console.log("reply_id : " + reply_id);
-        console.log("----------------------------------------------------------");
+        // console.log("\n----------------------------------------------------------");
+        // console.log("user_id : ", user_id);
+        // console.log("reply_id : " + reply_id);
+        // console.log("----------------------------------------------------------");
 
         try {
             // 사용자 id == 댓글 작성자 id인지 체크
