@@ -34,12 +34,13 @@ async function selectAllRecipe(connection) {
 // 검색 키워드에 따른 전체 레시피 리스트(미리보기) 조회
 async function selectWhereLikeAllRecipe(connection, keyword) {
     const query = mysql.format(`SELECT DISTINCT recipe.recipe_id, recipe.user_id, recipe.user_nickname, recipe.recipe_title,
-            (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
-            (SELECT ROUND (AVG(reply_score), 2) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_average_score',
-            recipe.update_time, recipe.recipe_img_url_1
-        FROM mechuli_schema.recipe_table AS recipe
-        LEFT JOIN mechuli_schema.reply_table AS reply
-        ON recipe.recipe_id = reply.recipe_id WHERE recipe.recipe_title LIKE ?;`, [keyword]);
+    (SELECT COUNT(*) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_reply_count',
+    (SELECT ROUND (AVG(reply_score), 2) FROM mechuli_schema.reply_table WHERE recipe_id = recipe.recipe_id) AS 'recipe_average_score',
+    (SELECT DATE_FORMAT(update_time, '%Y-%m-%d(%a) %H:%i') FROM mechuli_schema.recipe_table WHERE recipe_id = recipe.recipe_id) AS 'update_time',
+    recipe.recipe_img_url_1
+    FROM mechuli_schema.recipe_table AS recipe
+    LEFT JOIN mechuli_schema.reply_table AS reply
+    ON recipe.recipe_id = reply.recipe_id WHERE recipe.recipe_title LIKE ?;`, [keyword]);
     const Rows = await connection.query(query);
 
     return Rows[0];
