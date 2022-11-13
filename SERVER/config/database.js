@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');    // promise api => ws7 async await와
 
 // TODO: 본인의 DB 계정 입력
 const pool = mysql.createPool({
-    host : '13.209.81.127',
+    host : '3.39.6.101',
     port : 3306,
     user : 'user',
     password : 'user',
