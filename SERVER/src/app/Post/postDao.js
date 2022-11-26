@@ -100,7 +100,7 @@ async function selectReply(connection, recipe_id) {
     const query = mysql.format(`
     SELECT reply_id, reply_user_id, reply_nickname, reply_content, reply_score,
     DATE_FORMAT(reply_create_time, '%Y-%m-%d(%a) %H:%i') AS 'reply_create_time'
-    FROM mechuli_schema.reply_table WHERE recipe_id = "1";`, [recipe_id]);
+    FROM mechuli_schema.reply_table WHERE recipe_id = ?;`, [recipe_id]);
     const Rows = await connection.query(query);
 
     return Rows[0];
