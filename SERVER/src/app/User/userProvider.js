@@ -27,6 +27,14 @@ exports.userSignIn = async function (user_id, user_pw) {
     return result;
 };
 
+exports.getUsersNickname = async function (user_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await userDao.selectUsernicknameUserId(connection, user_id);
+    connection.release();
+  
+    return result;
+};
+
 exports.userIdOverlap = async function (user_id) {
     const connection = await pool.getConnection(async (conn) => conn);
     const result = await userDao.selectExistsUserId(connection, user_id);

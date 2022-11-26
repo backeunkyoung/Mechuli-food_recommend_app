@@ -26,7 +26,6 @@ exports.putUsers = async function (req, res) {
     return res.send(result);
 };
 
-
 /*
  * API No. 2
  * API Name : 로그인

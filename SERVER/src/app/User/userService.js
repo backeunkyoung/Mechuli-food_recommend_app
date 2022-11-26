@@ -112,7 +112,9 @@ exports.signIn = async function (user_id, user_pw) {
             }
 
             if (isUser == "1") {
-                return response(baseResponse.SUCCESS, {'user_id': user_id});
+                const user_nickname = await userProvider.getUsersNickname(user_id, user_pw);
+                
+                return response(baseResponse.SUCCESS, {'user_id': user_id, 'user_nickname': user_nickname[0].user_nickname});
             }
             else if (isUser == "0") {
                 return response(baseResponse.USER_USERID_NOT_EXIST);
