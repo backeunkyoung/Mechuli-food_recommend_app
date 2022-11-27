@@ -285,12 +285,12 @@ exports.postReply = async function (reply_user_id, recipe_id, reply_content, rep
             // console.log("user_nickname : " + reply_nickname);
             // console.log("----------------------------------------------------------");
 
-            const rows = await postProvider.addReply(recipe_id, reply_user_id, reply_nickname, reply_content, reply_score);
-            // console.log("\n----------------------------------------------------------");
-            // console.log(rows[0]);
-            // console.log("----------------------------------------------------------");
+            const reply_id = await postProvider.addReply(recipe_id, reply_user_id, reply_nickname, reply_content, reply_score);
+            
+            // 레시피의 댓글 정보
+            const newReply = await postProvider.getNewReply(recipe_id, reply_user_id);
 
-            return response(baseResponse.SUCCESS);
+            return response(baseResponse.SUCCESS, newReply);
 
         } catch(err) {
             console.log("\n----------------------------------------------------------");
