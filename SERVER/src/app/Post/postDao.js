@@ -114,6 +114,7 @@ async function insertIntoReply(connection, recipe_id, reply_user_id, reply_nickn
     return Rows[0];
 }
 
+// 사용자가 해당 게시물에 댓글을 달았었는지 확인
 async function selectExistsUsersReply(connection, recipe_id, reply_user_id) {
     const query = mysql.format(`SELECT EXISTS
      (SELECT * FROM  mechuli_schema.reply_table WHERE recipe_id = ?
