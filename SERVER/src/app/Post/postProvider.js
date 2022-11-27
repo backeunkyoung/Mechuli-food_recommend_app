@@ -84,6 +84,14 @@ exports.addReply = async function (recipe_id, reply_user_id, reply_nickname, rep
     return result;
 };
 
+exports.usersReplyExistCheck = async function (recipe_id, reply_user_id) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await postDao.selectExistsUsersReply(connection, recipe_id, reply_user_id);
+    connection.release();
+
+    return result;
+};
+
 exports.getNewReply = async function (recipe_id, reply_user_id) {
     const connection = await pool.getConnection(async (conn) => conn);
     const result = await postDao.selectFromGetNewReply(connection, recipe_id, reply_user_id);

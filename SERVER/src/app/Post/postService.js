@@ -276,6 +276,19 @@ exports.postReply = async function (reply_user_id, recipe_id, reply_content, rep
         // console.log("reply_score : " + reply_score);
 
         try {
+            // 해당 사용자가 타겟 게시물에 댓글을 단 적이 있는지 체크
+            let isReply;
+            const existCheck = await postProvider.usersReplyExistCheck(recipe_id, reply_user_id);
+
+            for (let data of existCheck) {
+                isReply = data.success;
+            }
+
+            if (isReply == "1") {
+                return errResponse(baseResponse.REPLY_REDUNDANT_ID);
+            }
+
+
             // 사용자 닉네임 가져오기
             let reply_nickname;
             const getNickname = await postProvider.retrieveUserNickname(reply_user_id);
@@ -285,12 +298,12 @@ exports.postReply = async function (reply_user_id, recipe_id, reply_content, rep
             // console.log("user_nickname : " + reply_nickname);
             // console.log("----------------------------------------------------------");
 
-            const reply_id = await postProvider.addReply(recipe_id, reply_user_id, reply_nickname, reply_content, reply_score);
+            await postProvider.addReply(recipe_id, reply_user_id, reply_nickname, reply_content, reply_score);
             
             // 레시피의 댓글 정보
             const newReply = await postProvider.getNewReply(recipe_id, reply_user_id);
 
-            return response(baseResponse.SUCCESS, newReply);
+            return response(baseResponse.SUCCESS, newReply[0]);
 
         } catch(err) {
             console.log("\n----------------------------------------------------------");

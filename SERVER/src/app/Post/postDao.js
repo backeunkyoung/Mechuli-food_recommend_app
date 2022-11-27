@@ -114,6 +114,15 @@ async function insertIntoReply(connection, recipe_id, reply_user_id, reply_nickn
     return Rows[0];
 }
 
+async function selectExistsUsersReply(connection, recipe_id, reply_user_id) {
+    const query = mysql.format(`SELECT EXISTS
+     (SELECT * FROM  mechuli_schema.reply_table WHERE recipe_id = ?
+      AND reply_user_id = ? limit 1) as success;`, [recipe_id, reply_user_id]);
+    const Rows = await connection.query(query);
+
+    return Rows[0];
+}
+
 // 방금 생성한 레시피 댓글 정보 가져오기
 async function selectFromGetNewReply(connection, recipe_id, reply_user_id) {
     const query = mysql.format(`SELECT reply_id, reply_user_id, reply_nickname, reply_content, reply_score,
@@ -159,6 +168,7 @@ module.exports = {
     selectRecipe,
     selectReply,
     insertIntoReply,
+    selectExistsUsersReply,
     selectFromGetNewReply,
     selectReplyOwnerId,
     updateSetReply,
