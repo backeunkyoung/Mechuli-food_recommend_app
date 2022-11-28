@@ -54,7 +54,7 @@ if __name__ == "__main__":
     matrix_user_mean = matrix - user_ratings_mean.reshape(-1, 1)
 
 
-    factorizer = recommend.MatrixFactorization(matrix, k=16, learning_rate=0.1, reg_param=0.1, epochs=100, verbose=True, print=True)
+    factorizer = recommend.MatrixFactorization(matrix, k=4, learning_rate=0.1, reg_param=0.1, epochs=100, verbose=True, print=True)
     factorizer.fit()
     factorizer.print_results()
 

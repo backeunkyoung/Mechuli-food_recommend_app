@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 # 판다스 라이브러리를 활용한 데이터 추출 코드
 
 # DB 접속 정보
-conn = pymysql.connect(host='13.209.81.127', user='user', password='user', db='mechuli_schema', charset='utf8')
+conn = pymysql.connect(host='3.39.6.101', user='user', password='user', db='mechuli_schema', charset='utf8')
 
 # query문 csv 파일로 저장
 query = 'SELECT * FROM mechuli_schema.userinfo_table;'
